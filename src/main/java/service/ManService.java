@@ -5,17 +5,11 @@ import model.Man;
 import java.util.List;
 
 public interface ManService {
-    String post(Man man);
+    List post(Man man);
 
     List<Man> get();
 
-    Man read(int id);
+    List<Man> getFirstName(String firstName);
 
-    Man readFirstName(String firstName);
-
-    boolean deleteFirstName(String firstName);
-
-    boolean deleteLastName(String LastName);
-
-    boolean deleteMiddleName(String middleName);
+    void deleteFullName (String firstName, String lastName, String middleName);
 }

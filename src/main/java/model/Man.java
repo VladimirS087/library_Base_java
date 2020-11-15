@@ -1,19 +1,10 @@
 package model;
 
 public class Man {
-    private Integer id;
     private String firstName;
     private String lastName;
     private String middleName;
     private String birthday;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getFirstName() {
         return firstName;

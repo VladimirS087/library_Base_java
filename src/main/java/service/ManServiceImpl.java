@@ -11,45 +11,38 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ManServiceImpl implements  ManService{
-    private static final Map<Integer, Man> MAN_REPOSITORY_MAP = new HashMap<>();
-
-    private static final AtomicInteger MAN_ID_HOLDER = new AtomicInteger();
+    private static final List<Man> MAN_REPOSITORY_LIST = new ArrayList<>();
 
     @Override
-    public String post(Man man) {
-        final int manId = MAN_ID_HOLDER.incrementAndGet();
-        man.setId(manId);
-        MAN_REPOSITORY_MAP.put(manId, man);
-        return MAN_REPOSITORY_MAP.toString();
+    public List <Man> post(Man man) {
+        MAN_REPOSITORY_LIST.add(man);
+        return MAN_REPOSITORY_LIST;
     }
 
     @Override
     public List<Man> get() {
-        return new ArrayList<>(MAN_REPOSITORY_MAP.values());
+        return MAN_REPOSITORY_LIST;
     }
 
     @Override
-    public Man read(int id) {
-        return MAN_REPOSITORY_MAP.get(id);
+    public List <Man> getFirstName (String firstName) {
+        List <Man> mansThisFirstName = new ArrayList<>();
+        for (Man man: MAN_REPOSITORY_LIST) {
+            if (firstName.equals(man.getFirstName())) {
+                mansThisFirstName.add(man);
+            }
+        }
+        return mansThisFirstName;
     }
 
     @Override
-    public Man readFirstName(String firstName) {
-        return MAN_REPOSITORY_MAP.get(firstName);
-    }
-
-    @Override
-    public boolean deleteFirstName(String firstName) {
-        return MAN_REPOSITORY_MAP.remove(firstName) != null;
-    }
-
-    @Override
-    public boolean deleteLastName(String lastName) {
-        return MAN_REPOSITORY_MAP.remove(lastName) != null;
-    }
-
-    @Override
-    public boolean deleteMiddleName(String middleName) {
-        return MAN_REPOSITORY_MAP.remove(middleName) != null;
+    public void deleteFullName (String firstName, String lastName, String middleName) {
+        for (Man man: MAN_REPOSITORY_LIST) {
+            if ((firstName.equals(man.getFirstName())) &&
+                    (lastName.equals(man.getLastName())) &&
+                    (middleName.equals(man.getMiddleName()))) {
+                MAN_REPOSITORY_LIST.remove(MAN_REPOSITORY_LIST.indexOf(man));
+            }
+        }
     }
 }

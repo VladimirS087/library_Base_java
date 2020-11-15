@@ -5,15 +5,12 @@ import model.Book;
 import java.util.List;
 
 public interface BookService {
-    String post(Book book);
+    List<Book> post(Book book);
 
     List<Book> get();
 
-    Book read(int id);
+    List <Book> getAuthor(String author);
 
-    Book readAuthor(String author);
+   void deleteAuthorAndName(String author, String name);
 
-    boolean deleteAuthor(String author);
-
-    boolean deleteName(String name);
 }

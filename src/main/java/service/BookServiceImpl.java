@@ -10,41 +10,37 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BookServiceImpl implements BookService {
-    private static final Map<Integer, Book> BOOK_REPOSITORY_MAP = new HashMap<>();
-
-    private static final AtomicInteger BOOK_ID_HOLDER = new AtomicInteger();
+    private static final List <Book> BOOK_REPOSITORY_LIST = new ArrayList<>();
 
     @Override
-    public String post(Book book) {
-        final int bookId = BOOK_ID_HOLDER.incrementAndGet();
-        book.setId(bookId);
-        BOOK_REPOSITORY_MAP.put(bookId, book);
-        return BOOK_REPOSITORY_MAP.toString();
+    public List <Book> post(Book book) {
+        BOOK_REPOSITORY_LIST.add(book);
+        return BOOK_REPOSITORY_LIST;
     }
 
     @Override
     public List<Book> get() {
-        return new ArrayList<>(BOOK_REPOSITORY_MAP.values());
+        return BOOK_REPOSITORY_LIST;
     }
 
     @Override
-    public Book read(int id) {
-        return BOOK_REPOSITORY_MAP.get(id);
+    public List <Book> getAuthor(String author) {
+        List <Book> booksThisAuthor = new ArrayList<>();
+        for (Book book: BOOK_REPOSITORY_LIST) {
+            if (author.equals(book.getAuthor())) {
+                booksThisAuthor.add(book);
+            }
+        }
+        return booksThisAuthor;
     }
 
     @Override
-    public Book readAuthor(String author) {
-        return BOOK_REPOSITORY_MAP.get(author);
+    public void deleteAuthorAndName(String author, String name) {
+        for (Book book: BOOK_REPOSITORY_LIST) {
+            if ((author.equals(book.getAuthor())) && (name.equals(book.getName()))) {
+                BOOK_REPOSITORY_LIST.remove(BOOK_REPOSITORY_LIST.indexOf(book));
+            }
+        }
     }
 
-
-    @Override
-    public boolean deleteAuthor(String author) {
-        return BOOK_REPOSITORY_MAP.remove(author) != null;
-    }
-
-    @Override
-    public boolean deleteName(String name) {
-        return BOOK_REPOSITORY_MAP.remove(name) != null;
-    }
 }
