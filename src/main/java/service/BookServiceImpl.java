@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Service
 public class BookServiceImpl implements BookService {
     private static final List <Book> BOOK_REPOSITORY_LIST = new ArrayList<>();
 

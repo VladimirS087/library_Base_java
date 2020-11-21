@@ -34,7 +34,8 @@ public class BookController {
     }
 
     @DeleteMapping(value = "/books")
-    public ResponseEntity<?> deleteAuthorAndName(@RequestParam String author, String name) {
+    public ResponseEntity<?> deleteAuthorAndName(@RequestParam String author,
+                                                 @RequestParam String name) {
         bookService.deleteAuthorAndName(author, name);
 
         return new ResponseEntity<>(HttpStatus.OK);

@@ -35,7 +35,9 @@ public class ManController {
     }
 
     @DeleteMapping(value = "/mans/{lastName}")
-    public ResponseEntity<?> deleteFullName(@RequestParam String firstName, String lastName, String middleName) {
+    public ResponseEntity<?> deleteFullName(@RequestParam String firstName,
+                                            @RequestParam String lastName,
+                                            @RequestParam String middleName) {
         manService.deleteFullName(firstName, lastName, middleName);
         return new ResponseEntity<>(HttpStatus.OK);
     }

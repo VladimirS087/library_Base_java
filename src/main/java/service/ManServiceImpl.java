@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Service
 public class ManServiceImpl implements  ManService{
     private static final List<Man> MAN_REPOSITORY_LIST = new ArrayList<>();
 
