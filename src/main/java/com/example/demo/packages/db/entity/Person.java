@@ -10,7 +10,7 @@ public class Person {
     @Id
     @GeneratedValue
     @Column(name = "person_id", nullable = false)
-    private Long Id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -29,15 +29,6 @@ public class Person {
     )
     private Set<Book> books;
 
-    public void addBook (Book book) {
-        this.books.add(book);
-        book.getPersons().add(this);
-    }
-
-    public void removeBook (Book book) {
-        this.books.remove(book);
-        book.getPersons().remove(this);
-    }
     /*Конструктор
      * */
     public Person(){
@@ -50,11 +41,11 @@ public class Person {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getFirstName() {
@@ -88,7 +79,7 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", middleName='" + middleName + '\'' +

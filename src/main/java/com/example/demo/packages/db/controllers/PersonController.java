@@ -1,97 +1,79 @@
 package com.example.demo.packages.db.controllers;
 
+import com.example.demo.packages.db.dto.PersonDTO;
 import com.example.demo.packages.db.entity.Book;
-import com.example.demo.packages.db.entity.Person;
-import com.example.demo.packages.db.repository.PersonRepository;
-import org.springframework.beans.BeanUtils;
+import com.example.demo.packages.db.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "", produces = "application/json")
+@RequestMapping(value = "persons", produces = "application/json")
 public class PersonController {
-    private final PersonRepository personRepository;
+
+    private final PersonService personService;
 
     @Autowired
-    public PersonController(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
     }
 
-
     // добавляем пользователя
-    @PostMapping(value = "post-person")
-    public Person postPerson (@RequestBody Person person) {
-        return personRepository.save(person);
+    @PostMapping(value = "/add-person")
+    public PersonDTO addPerson (@RequestBody PersonDTO personDTO) {
+        return personService.addPerson(personDTO);
     }
 
     // изменяем пользователя
-    @PutMapping(value = "change-person/{Id}")
-    public Person change(
-            @PathVariable("Id") Person personFromDb,
-            @RequestBody Person person
+    @PutMapping(value = "/change-person/{id}")
+    public PersonDTO changePerson(
+            @PathVariable("id") Long id,
+            @RequestBody PersonDTO personDTO
     ) {
-        BeanUtils.copyProperties(person, personFromDb, "Id");
-        return personRepository.save(person);
+        return personService.changePerson(id, personDTO);
     }
 
-    // удаляем по Id
-    @DeleteMapping(value = "person/delete-by-id")
-    public ResponseEntity<?> deleteById(@RequestParam Long Id) {
+    // удаляем по id
+    @DeleteMapping(value = "/delete-by-id")
+    public ResponseEntity<?> deleteById(@RequestParam Long id) {
 
-        personRepository.deleteById(Id);
+        personService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // удаляем по ФИО
-    @DeleteMapping(value = "delete-by-fullName")
+    @DeleteMapping(value = "/delete-by-fullName")
     public ResponseEntity<?> deleteByFullName(@RequestParam String firstName,
                                             @RequestParam String lastName,
                                             @RequestParam String middleName) {
-        List<Person> persons = personRepository.findByFullName(firstName, lastName, middleName);
-        for (Person person : persons) {
-            personRepository.deleteById(person.getId());
-        }
+        personService.deleteByFullName(firstName, lastName, middleName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    //    параметры для примера:
-//    ?firstName=Bob&lastName=Marley&middleName=Bob
-//    ?firstName=John&lastName=Bon&middleName=Jovi
 
     // получаем список книг пользователя
-    @GetMapping(value = "person-books/{Id}")
-    Set<Book> personBooks (@PathVariable("Id") Long Id) {
-        Optional<Person> person = personRepository.findById(Id);
-        Person realPerson = person.get();
-        return realPerson.getBooks();
+    @GetMapping(value = "/list-books/{id}")
+    public Set<Book> personBooks (@PathVariable("id") Long id) {
+        return personService.personBooks(id);
     }
 
     // добавляем книгу пользователю
-    @PostMapping(value = "person-took-book/{Id}")
+    @PostMapping(value = "/person-took-book/{id}")
     public String personTookBook (
-            @PathVariable("Id") Long Id,
+            @PathVariable("id") Long id,
             @RequestBody Book book
     ) {
-        Optional<Person> person = personRepository.findById(Id);
-        Person realPerson = person.get();
-        realPerson.addBook(book);
-        return (realPerson.toString() + ":" + realPerson.getBooks());
+        return personService.personTookBook(id, book);
     }
+
     // удаляем книгу от пользователя
-    @PostMapping(value = "person-returned-book/{Id}")
+    @PostMapping(value = "/person-returned-book/{id}")
     public String personReturnedBook (
-            @PathVariable("Id") Long Id,
+            @PathVariable("id") Long id,
             @RequestBody Book book
     ) {
-        Optional<Person> person = personRepository.findById(Id);
-        Person realPerson = person.get();
-        realPerson.removeBook(book);
-        return (realPerson.toString() + ":" + realPerson.getBooks());
+        return personService.personReturnedBook(id, book);
     }
 }

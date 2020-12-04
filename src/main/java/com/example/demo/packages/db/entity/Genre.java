@@ -10,7 +10,7 @@ public class Genre {
     @Id
     @GeneratedValue
     @Column(name = "genre_id", nullable = false)
-    private Long Id;
+    private Long id;
 
     @Column(name = "genre_name")
     private String genreName;
@@ -26,11 +26,11 @@ public class Genre {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getGenreName() {
@@ -48,7 +48,7 @@ public class Genre {
     @Override
     public String toString() {
         return "Genre{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", genreName='" + genreName + '\'' +
                 ", books=" + books +
                 '}';

@@ -10,7 +10,7 @@ public class Book {
     @Id
     @GeneratedValue
     @Column(name = "book_id", nullable = false)
-    private Long Id;
+    private Long id;
 
     @Column(name = "name")
     private String Name;
@@ -24,25 +24,16 @@ public class Book {
     )
     private Set<Genre> genres;
 
-    public void addBookGenre (Genre genre) {
-        this.genres.add(genre);
-        genre.getBooks().add(this);
-    }
-
-    public void removeBookGenre (Genre genre) {
-        this.genres.remove(genre);
-        genre.getBooks().remove(this);
-    }
     @ManyToMany(mappedBy = "books")
     private Set<Person> persons;
 
 
     @Column(name = "author_id")
-    private Long authorId;
+    private Long author_id;
 
-    public Long getAuthor_id() { return authorId; }
+    public Long getAuthor_id() { return author_id; }
 
-    public void setAuthor_id(Long author_id) { this.authorId = authorId; }
+    public void setAuthor_id(Long author_id) { this.author_id = author_id; }
 
     /*Конструктор
      * */
@@ -51,11 +42,11 @@ public class Book {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getName() {
@@ -77,11 +68,11 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", Name='" + Name + '\'' +
                 ", genres=" + genres +
                 ", persons=" + persons +
-                ", authorId=" + authorId +
+                ", authorId=" + author_id +
                 '}';
     }
 }

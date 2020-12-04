@@ -15,11 +15,6 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT a FROM Author a WHERE first_name = :first_name AND last_name = :last_name AND middle_name = :middle_name")
-//            "OR (first_name = :last_name AND last_name = :first_name AND middle_name = :middle_name) " +
-//            "OR (first_name = :last_name AND last_name = :middle_name AND middle_name = :first_name) " +
-//            "OR (first_name = :middle_name AND last_name = :last_name AND middle_name = :first_name) " +
-//            "OR (first_name = :middle_name AND last_name = :first_name AND middle_name = :last_name) " +
-//            "OR (first_name = :first_name AND last_name = :middle_name AND middle_name = :last_name")
     Author findAuthorByFullName(
             @Param("first_name") String firstName,
             @Param("last_name") String lastName,

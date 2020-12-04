@@ -1,11 +1,9 @@
 package com.example.demo.packages.db.controllers;
 
-import com.example.demo.packages.db.entity.Author;
+import com.example.demo.packages.db.dto.BookDTO;
 import com.example.demo.packages.db.entity.Book;
 import com.example.demo.packages.db.entity.Genre;
-import com.example.demo.packages.db.entity.Person;
-import com.example.demo.packages.db.repository.BookRepository;
-import org.springframework.beans.BeanUtils;
+import com.example.demo.packages.db.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,28 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping(value = "", produces = "application/json")
+@RequestMapping(value = "/books", produces = "application/json")
 public class BookController {
-    private final BookRepository bookRepository;
+    private final BookService bookService;
 
     @Autowired
-    public BookController(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public BookController(BookService bookService) { this.bookService = bookService;
     }
 
     // добавляем книгу
-    @PostMapping(value = "post-book")
-    public String postBook (@RequestBody Book book) {
-        return bookRepository.save(book).toString();
+    @PostMapping(value = "/add-book")
+    public BookDTO addBook (@RequestBody BookDTO bookDTO) {
+        return bookService.addBook(bookDTO);
     }
 
-    // удаляем по Id, если у книги нет пользователя
-    @DeleteMapping(value = "book/delete-by-id")
-    public ResponseEntity<?> deleteById(@RequestParam Long Id) {
-        Optional<Book> book = bookRepository.findById(Id);
-        Book realBook = book.get();
-        if (realBook.getPersons().isEmpty()) {
-            bookRepository.deleteById(Id);
+    // удаляем по id, если у книги нет пользователя
+    @DeleteMapping(value = "/delete-by-id")
+    public ResponseEntity<?> deleteById(@RequestParam Long id) {
+        if (bookService.deleteById(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else {
@@ -43,33 +37,26 @@ public class BookController {
         }
     }
     //  книге новый жанр
-    @PutMapping(value = "change-bookGenre/{Id}")
-    public Book book(
-            @PathVariable("Id") Book bookFromDb,
+    @PutMapping(value = "/change-genre/{id}")
+    public Book bookNewGenre(
+            @PathVariable("id") Long id,
             @RequestBody Genre genre
     ) {
-        bookFromDb.addBookGenre(genre);
-        return bookRepository.save(bookFromDb);
+        return bookService.bookNewGenre(id, genre);
     }
 
-
     // список книг по автору
-    @GetMapping(value = "books-by-author")
+    @GetMapping(value = "/list-by-author")
     public Set<Book> booksByAuthor(@RequestParam String firstName,
                                    @RequestParam String lastName,
                                    @RequestParam String middleName) {
-        Author author = bookRepository.findAuthorByFullName(firstName, lastName, middleName);
-
-        return author.getBooks();
+        return bookService.booksByAuthor(firstName, lastName, middleName);
     }
 
     // список книг по жанру
-    @GetMapping(value = "books-by-genre")
+    @GetMapping(value = "/list-by-genre")
     public List<String> booksByGenre(@RequestParam String genreName) {
-        List<String> booksByGenre = new ArrayList<>();
-        Genre genre = bookRepository.findBooksByGenre(genreName);
-        booksByGenre.add("Genre : " + genre.getGenreName() + "Books : " + genre.getBooks());
-        return booksByGenre;
+        return bookService.booksByGenre(genreName);
     }
 
 }

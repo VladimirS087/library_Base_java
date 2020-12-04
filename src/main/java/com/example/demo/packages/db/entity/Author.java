@@ -11,7 +11,7 @@ public class Author {
     @Id
     @GeneratedValue
     @Column(name = "author_id", nullable = false)
-    private Long Id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;
@@ -35,11 +35,11 @@ public class Author {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        id = id;
     }
 
     public String getFirstName() {
@@ -73,7 +73,7 @@ public class Author {
     @Override
     public String toString() {
         return "Author{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", middleName='" + middleName + '\'' +
